@@ -16,8 +16,8 @@ def get_n_T_xi(density,u):
     ionrate=ionization_rate*numpy.ones_like(density)
     return (number_density, temperature, ionrate)
     
-N_part = 1000
-M_cloud = 1000 | units.MSun
+N_part = 100
+M_cloud = 10 | units.MSun
 R_cloud = 1 | units.pc
 dt = 1 | units.kyr
 t_end = 1 | units.Myr
