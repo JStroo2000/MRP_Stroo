@@ -17,9 +17,12 @@ class ChemicalModelingInterface(object):
     def commit_parameters():
         pass
 
-    @remote_function
-    def new_particle():
-        pass
+    @remote_function(can_handle_array=True)
+    def new_particle(number_density='d'|units.cm**-3,temperature='d'|units.K,ionrate='d'|units.s**-1):
+        """
+        Add a new particle
+        """
+        returns (particle_index='i')
 
     @remote_function(can_handle_array=True)
     def delete_particle(index_of_particle='i'):
@@ -114,6 +117,39 @@ class ChemicalModeling(common.CommonCode):
         """
         TODO: Add all the methods that should be available on the user-end of the ChemicalModeling class
         """
-        
+        handler.add_method(
+            "new_particle",
+            (units.cm**-3, units.K, units.s**-1),
+            (handler.INDEX, handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "delete_particle",
+            (handler.INDEX),
+            (handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "get_abundances",
+            (handler.INDEX, handler.INDEX),
+            (handler.NO_UNIT, handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "set_abundances",
+            (handler.INDEX, handler.INDEX, handler.NO_UNIT),
+            (handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "get_state",
+            (handler.INDEX),
+            (units.cm**-3, units.K, units.s**-1, handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "set_state",
+            (handler.INDEX, units.cm**-3, units.K, units.s**-1),
+            (handler.ERROR_CODE)
+        )
+        handler.add_method(
+            "get_index_of_species",
+            
+        )
     
 
