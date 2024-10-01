@@ -9,6 +9,7 @@ from amuse.io import write_set_to_file
 from tests.plotting import HydroPlotter
 import matplotlib.pyplot as plt
 import numpy
+import time 
 
 def get_n_T_xi(density, u):
     gamma = 1.4
@@ -32,7 +33,8 @@ def check_new_sinks(parts, sink_density):
 # def out_of_bounds(parts, bounds):
 #     far_away = parts.select_array(lambda x, y, z: (x>box_size/2)or(x<-1*box_size/2)or(y>box_size/2)or(y<-1*box_size/2)or(z>box_size/2)or(z<-1*box_size/2),['x','y','z'])
 #     parts.remove_particles(far_away)
-
+start = time.perf_counter()
+n_cores = 2
 n_particles = 100
 M_cloud = 1e4 | units.Msun
 r_cloud = 19 | units.pc
@@ -57,7 +59,7 @@ cloud2.vx += v_collision
 cloud2.add_particles(cloud1)
 particles = cloud2.copy()
 
-chem = UCLchem(number_of_workers=2)
+chem = UCLchem(number_of_workers=n_cores)
 #PLACEHOLDER: replace Fi with Phantom when ready
 sph = Fi(conv, redirection='none')
 sph.parameters.self_gravity_flag = True
@@ -113,3 +115,5 @@ while t <= t_end:
 
 plotter.plot_projection(200,params_to_plot=['density'],use_gaussian_kernel=True)
 plotter.clear_all_particles()
+end = timer.perf_counter()
+print("Time elapsed with {} particles and {} cores: {} seconds".format(n_particles,n_cores, start-end))
